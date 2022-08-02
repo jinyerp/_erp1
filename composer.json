@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "jinyerp/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "jinyerp base Laravel",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
@@ -24,7 +24,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Modules\\": "Modules/",
+            "Modules\\": "modules/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
