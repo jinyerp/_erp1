@@ -1,9 +1,10 @@
-# JinyERP version 1.0
-지니ERP는 다양한 업무기능들을 모듈화 하여 설치 사용할 수 있습니다.
+# JinyERP v1
+`지니ERP`는 라라벨 기반의 업무처리 프레임워크 입니다. 다양한 업무 기능들을 모듈화 하여 개별로 설치 사용을 할 수 있습니다.
+
 
 ## 설치하기
-지니ERP는 PHP언어와 라라벨 프레임워크 기반으로 제작되었습니다. 따라서, PHP 언어와 컴포저, 마리아DB가 설치되어 있어야 합니다. 
-
+지니ERP는 `PHP`언어 기반의 라라벨을 기본 바탕으로 두고 있습니다. 또한, 데이터베이스는 Mysql 또는 마리아DB를 사용합니다.
+UI 빌드를 위하여 nodejs와 tailwind css 를 필요로 합니다.
 * php 8.0 이상
 * composer
 * MariaDB
@@ -12,19 +13,26 @@
 ### 1. 라라벨 설치
 컴포저를 이용하여 라라벨 프레임워크를 설치합니다. 다음과 같이 콘솔에서 명령을 입력하시면 라라벨이 설치됩니다.
 ```
-$ composer create-project --prefer-dist laravel/laravel jinyerp
+$ composer create-project --prefer-dist laravel/laravel 프로젝트명
 ```
 
-#### TailwindCSS 설정
-지니ERP는 UI를 구성하기 위하여 tailwindCSS를 기본으로 사용합니다. 이를 위하여 간단환 설정이 필요합니다.
-> 라라벨 [테일윈드](https://tailwindcss.com/docs/guides/laravel) 설치
+#### 2. 모듈 관리자 설치
+`지니ERP`는 작은 개별 모듈들로 구성되어 동작을 합니다. 각각의 모듈을 설치관리하기 위한 관리자를 설치합니다.
+
+```
+$ composer require jiny/modules
+$ php artisan vendor:publish --provider="Jiny\Modules\JinyModulesServiceProvider"
+$ php artisan module:init
+```
+
+## UI 컴파일하기
+`지니ERP`의 기본 UI는 [tailwind css](https://tailwindcss.com/docs/guides/laravel)를 이용합니다. 이를 위하여 nodejs를 통하여 tailwind를 설치하고, scss를 컴파일하여 설치를 합니다.
 
 npm을 통하여 테일윈드 패키지를 설지합니다.
 ```
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init
 ```
-> npm을 사용하기 위해서는 nodejs가 설치되어 있어야 합니다.
 
 라라벨 mix를 통하여 asset을 컴파일 합니다. 다음과 같이 webpack.mix.js를 수정합니다. 파일명 및 위치 : /webpack.mix.js
 ```
@@ -33,8 +41,11 @@ mix.js("resources/js/app.js", "public/js")
     require("tailwindcss"),
   ]);
 .browserSync("http://localhost:8000");
+```
+
 tailwind.config.js 파일을 수정합니다. content 배열을 추가합니다.
 
+```
 module.exports = {
   content: [
     "./resources/**/*.blade.php",
@@ -61,36 +72,8 @@ module.exports = {
 npm run dev
 ```
 
-#### 라이브와이어 설치
-지니ERP는 최신 라이브와이어를 통하여 UI 컴포넌트 구성과 AJAX 통신을 처리합니다. 다음과 같이 명령을 입력하여 라이브와이어 컴포넌트를 설치합니다. 
-```
-$ composer require livewire/livewire
-```
-
-#### 라라벨 모듈
-지니ERP는 각각의 기능을 모듈로 관리합니다.
+## 실행
 
 ```
-$ composer require jiny/modules
-$ php artisan vendor:publish --provider="Nwidart\Modules\LaravelModulesServiceProvider"
+php artisan serve
 ```
-config/module.php 설정파일 변경
-오토로드 변경
-```
-{
-  "autoload": {
-    "psr-4": {
-      "App\\": "app/",
-      "Modules\\": "Modules/",
-      "Database\\Factories\\": "database/factories/",
-      "Database\\Seeders\\": "database/seeders/"
-  }
-
-}
-```
-
-```
-$ composer dump-autoload
-```
-
-### 3. 지니UI 설치
